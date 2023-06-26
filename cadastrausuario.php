@@ -1,51 +1,52 @@
 <?php
 include("conectadb.php");
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = $_POST['nome'];
     $senha = $_POST['senha'];
     #VALIDAÇÂO DE USUARIO. VERIFICA SE USUARIO JÁ EXISTE
-    $sql ="SELECT COUNT(usu_id) FROM usuarios WHERE usu_nome ='$nome'
+    $sql = "SELECT COUNT(usu_id) FROM usuarios WHERE usu_nome ='$nome'
     AND usu_senha = '$senha'";
     $retorno = mysqli_query($link, $sql);
 
-    while($tbl = mysqli_fetch_array($retorno)){
+    while ($tbl = mysqli_fetch_array($retorno)) {
         $cont = $tbl[0];
     }
     #VALIDAÇÂO DE TRUE E FALSE
-    if($cont ==1){
-        echo"<script>window.alert('USUARIO JÁ EXISTE');</script>";
-    }
-    else{
+    if ($cont == 1) {
+        echo "<script>window.alert('USUARIO JÁ EXISTE');</script>";
+    } else {
         $sql = "INSERT INTO usuarios (usu_nome, usu_senha, usu_ativo)
         VALUES('$nome','$senha','n')";
         mysqli_query($link, $sql);
         #CADASTROU USUARIO E JOGA MENSAGEM NA TELA E DIRECIONA PARA LISTA USUARIO
-        echo"<script>window.alert('USUARIO JÁ EXISTE');</script>";
-        echo"<script>window.location.href='listausuario.php';</script>";
-
+        echo "<script>window.alert('USUARIO JÁ EXISTE');</script>";
+        echo "<script>window.location.href='listausuario.php';</script>";
     }
 }
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/estiloadm.css">
-   
+
     <title>Document</title>
 </head>
+
 <body>
     <div>
         <ul class="menu">
-            <li><a href="cadastrausuario.php">CADASTRA USUARIO</a></li>
-            <li><a href="cadastrausuario.php">LISTA USUARIO</a></li>
-            <li><a href="cadastrausuario.php">CADASTRA PRODUTO</a></li>
-            <li><a href="cadastrausuario.php">LISTA PRODUTO</a></li>
-            <li><a href="cadastrausuario.php">LISTA CLIENTE</a></li>
-            <li class="menuloja"><a href="./areacliente/loja.php">LOJA</a></li> 
+        <li><a href="cadastrausuario.php">CADASTRA USUARIO</a></li>
+                <li><a href="listausuario.php">LISTA USUARIO</a></li>
+                <li><a href="cadastraproduto.php">CADASTRA PRODUTO</a></li>
+                <li><a href="listaproduto.php">LISTA PRODUTO</a></li>
+                <li><a href="listacliente.php">LISTA CLIENTE</a></li>
+                <li class="menuloja"><a href="logout.php">SAIR</a></li>
+            <li class="menuloja"><a href="./areacliente/loja.php">LOJA</a></li>
         </ul>
     </div>
 
@@ -58,5 +59,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             <input type="submit" name="cadastrar" id="cadastrar" value="CADASTRAR">
         </form>
     </div>
+
+
+
+    
 </body>
+
 </html>
