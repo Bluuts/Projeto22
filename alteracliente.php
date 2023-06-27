@@ -5,24 +5,37 @@ session_start();
 
 #TRAZ DADOS DO BANCO PARA COMPLETAR OS BANCOS
 $id = $_GET['id'];
-$sql = "SELECT * FROM usuarios WHERE usu_id = '$id'";
+$sql = "SELECT * FROM cliente WHERE cli_id = '$id'";
 $retorno = mysqli_query($link, $sql);
 
 #PRENHECHENDO O ARRAY SEMPRE
 while ($tbl = mysqli_fetch_array($retorno)) {
-    $nome = $tbl[1]; #CAMPO NOME DA TABELA DO BANCO
-    $senha = $tbl[2]; #CAMPO SENHA DA TABELA DO BANCO
-    $ativo = $tbl[3]; #CAMPO ATIVO DA TABBELA DO BANCO
+    $id = $tbl [0];
+    $cpf = $tbl[1];
+    $nome = $tbl[2];
+    $datanasc = $tbl[3];
+    $telefone = $tbl[4];
+    $logradouro = $tbl[5];
+    $numero = $tbl[6];
+    $cidade = $tbl[7];
+    $ativo = $tbl[8];
 }
+
+
 
 #USUARIO CLICA NO BOTÃO SALVAR
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'];
+    $cpf = $_POST['cpf'];
     $nome = $_POST['nome'];
-    $senha = $_POST['senha'];
+    $datanasc = $_POST['datanasc'];
+    $telefone = $_POST['telefone'];
+    $logradouro = $_POST['logradouro'];
+    $numero = $_POST['numero'];
+    $cidade = $_POST['cidade'];
     $ativo = $_POST['ativo'];
 
-    $sql = "UPDATE usuarios SET usu_nome = '$nome', usu_senha = '$senha', usu_ativo = '$ativo' WHERE usu_id = $id";
+    $sql = "UPDATE clientes SET cli_cpf ='$cpf', cli_nome ='$nome', cli_datanasc ='$datanasc', cli_telefone ='$telefone', cli_logradouro ='$logradouro', cli_numero ='$numero', cli_cidade ='$cidade', cli_ativo = '$ativo' WHERE cli_id = $id";
 
     mysqli_query($link, $sql);
 
@@ -39,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/estiloadm.css">
 
-    <title>ALTERA USUARIOS</title>
+    <title>ALTERA CLIENTE</title>
 </head>
 
 <body>
@@ -57,19 +70,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <div>
-        <form action="alterausuario.php" method="post">
-            <input type="hidden" name="id" value="<?= $id ?>">
+        <form action="alteracliente.php" method="post">
+            <input type="hidden" name="id" value="<?= $id ?>">  
             <br>
-            <input type="text" name="nome" id="nome" value="<?= $nome ?>" required>
+            <input type="text" name="cpf" value="<?= $cpf ?>" required>
             <br>
-            <input type="password" name="senha" id="senha" value="<?= $senha ?>" required>
+            <input type="text" name="nome" value="<?= $nome ?>" required>
+            <br>
+            <input type="text" name="datanasc" value="<?= $datanasc ?>" required>
+            <br>
+            <input type="text" name="telefone" value="<?= $telefone ?>" required>
+            <br>
+            <input type="text" name="logradouro" value="<?= $logradouro ?>" required>
+            <br>
+            <input type="text" name="numero" value="<?= $numero ?>" required>
+            <br>
+            <input type="text" name="cidade" value="<?= $cidade ?>" required>
             <br>
             <input type="radio" name="ativo" value="s" <?= $ativo == "s" ? "checked" : "" ?>>ATIVO>
             <br>
             <input type="radio" name="ativo" value="n" <?= $ativo == "n" ? "checked" : "" ?>>INATIVO>
             <br>
-            <input type="submit" name="salvar" id="salvar" value="SALVAR">
+            <input type="submit" name="salvar" value="SALVAR">
         </form>
+
     </div>
 
 

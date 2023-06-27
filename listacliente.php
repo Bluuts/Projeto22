@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <!-- AQUI LISTA OS USUARIOS DO BANCO  -->
     <div id="background">
-        <form action="listausuario.php" method="post">
+        <form action="listauclientes.php" method="post">
             <input type="radio" name="ativo" class="radio" value="s" required 
             onclick="submit()" <?=$ativo =='s'?"checked":""?>>ATIVOS
 
@@ -77,7 +77,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="container">
             <table border="1">
                 <tr>
-                    <th>NOME</th>
+                    <th>id</th>
+                    <th>CPF</th>
+                    <th>nome</th>
+                    <th>datanasc</th>
+                    <th>telefone</th>
+                    <th>logradouro</th>
+                    <th>numero</th>
+                    <th>cidade</th>
                     <th>ALTERAR DADOS</th>
                     <th>ATIVO?</th>
                 </tr>
@@ -86,10 +93,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     while($tbl = mysqli_fetch_array($retorno)){
                 ?>
                     <tr>
-                        <td><?= $tbl[1]?></td> <!-- TRAZ SOMENTE A COLUNA 1 DO BANCO [NOME]-->
-                        <td><a href="alterausuario.php?id=<?= $tbl[0]?>">
+                        <td><?= $tbl[0]?></td>
+                        <td><?= $tbl[1]?></td>
+                        <td><?= $tbl[2]?></td>
+                        <td><?= $tbl[3]?></td>
+                        <td><?= $tbl[4]?></td>
+                        <td><?= $tbl[5]?></td>
+                        <td><?= $tbl[6]?></td>
+                        <td><?= $tbl[7]?></td>
                         <input type="button" value="ALTERAR DADOS"></a></td> <!-- CRIANDO UM BOTÃO ALTERAR PASSANDO O ID DO USUARIO NA URL VIA GET -->
-                        <td><?=$check =($tbl[3] == 's')?"SIM":"NÃO"?></td> <!-- VALIDA S OU N E ESCREVE "SIM" E "NÃO"-->
+                        <td><?=$check =($tbl[8] == 's')?"SIM":"NÃO"?></td> <!-- VALIDA S OU N E ESCREVE "SIM" E "NÃO"-->
                     </tr>
                     <?php
                     }
