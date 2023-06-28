@@ -22,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $logradouro = $_POST['logradouro'];
     $numero = $_POST['numero'];
     $cidade = $_POST['cidade'];
+    $ativo = $_POST['ativo'];
+
     
     #VALIDAÇÃO DE USUÁRIO. VERIFICA SE USUÁRIO JÁ EXISTE
     $sql = "SELECT COUNT(cli_id) FROM clientes WHERE cli_nome ='$nome' AND cli_senha = '$senha'";
@@ -97,4 +99,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         <input type="submit" name="cadastrar" id="cadastrar" value="CADASTRAR">
     </form>
 </div>
-
+</html>
