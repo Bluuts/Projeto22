@@ -1,3 +1,4 @@
+
 <!-- ESTRUTURA EM PHP QUE SERA UTILIZANDO EM CADASTRAPRODUTO.HTML -->
 
 <?php
@@ -5,31 +6,32 @@
 
 
 
-    include("conectadb.php");
+include("conectadb.php");
 
 
 
 
-    session_start();
+session_start();
 
-    $nomeusuario = $_SESSION['nomeusuario'];
-
-
+$nomeusuario = $_SESSION['nomeusuario'];
 
 
-    if($_SERVER ['REQUEST_METHOD'] == 'POST'){
 
-        $nome = $_POST['nome'];
 
-        $descricao = $_POST['$descricao'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        $quantidade = $_POST['quantidade'];
+    $nome = $_POST['nome'];
 
-        $custo = $_POST['custo'];
+    $descricao = $_POST['descricao'];
 
-        $preco = $_POST['preco'];
+    $quantidade = $_POST['quantidade'];
 
-    }
+    $custo = $_POST['custo'];
+
+    $preco = $_POST['preco'];
+
+
+
 
     // THE WITCH IS COMING
 
@@ -38,7 +40,7 @@
 
     // TRANFORMA A IMAGEM EM CRIPTOGRAFIA, TORNANDO ELA MAIS LEVE
 
-    if(isset($_FILES['imagem']) && $_FILES['imagem']['error']=== UPLOAD_ERR_OK){ // (===) IDENTIFICA SE ALGO É IDENTICO
+    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) { // (===) IDENTIFICA SE ALGO É IDENTICO
 
         $imagem_temp = $_FILES['imagem']['tmp_name'];
 
@@ -66,7 +68,7 @@
 
     $retorno = mysqli_query($link, $sql);
 
-    while($tbl = mysqli_fetch_array($retorno)){
+    while ($tbl = mysqli_fetch_array($retorno)) {
 
         $cont = $tbl[0];
 
@@ -75,31 +77,25 @@
 
         // VERIFICA SE PRODUTO EXISTE, SE SIM, INFORMA, SE NÃO, INSERE
 
-        if($cont == 1){
+        if ($cont == 1) {
 
-            echo"<script>window.alert('PRODUTO JÁ CADASTRADO');</script>";
+            echo "<script>window.alert('PRODUTO JÁ CADASTRADO');</script>";
 
-        }
-
-
-
-
-        else{
+        } else {
 
             $sql = "INSERT INTO produtos (pro_nome, pro_descricao, pro_quantidade, pro_custo, pro_preco, pro_ativo, imagem1) VALUE ('$nome', '$descricao', '$quantidade', '$custo', '$preco', 's', '$imagem_base64')";
 
             mysqli_query($link, $sql);
 
-            echo"<script>window.alert('PRODUTO CADASTRADO COM SUCESSO!');</script>";
+            echo "<script>window.alert('PRODUTO CADASTRADO COM SUCESSO!');</script>";
 
-            echo"<script>window.location.href='listaproduto.php';</script>";
+            echo "<script>window.location.href='listaproduto.php';</script>";
 
         }
 
     }
 
-
-
+}
 
 ?>
 
@@ -109,6 +105,9 @@
 <!DOCTYPE html>
 
 <html lang="pt-br">
+
+
+
 
 <head>
 
@@ -122,14 +121,17 @@
 
 </head>
 
+
+
+
 <body>
 
 
 
 
-<div>
+    <div>
 
-    <!--  -->
+        <!--  -->
 
         <ul class="menu">
 
@@ -155,21 +157,24 @@
 
             if ($nomeusuario != null) {
 
-            ?>
+                ?>
 
                 <!-- USO DO ELEMENTO HTML COM PHP INTERNO -->
 
-                <li class="profile">OLÁ <?= strtoupper($nomeusuario) ?></li>
+                <li class="profile">OLÁ
 
-            <?php
+                    <?= strtoupper($nomeusuario) ?>
+
+                </li>
+
+                <?php
 
                 #ABERTURA DE OUTRO PHP PARA CASO FALSE
 
             } else {
 
                 echo "<script>window.alert('USUARIO NÃO AUTENTICADO');
-
-                        window.location.href='login.php';</script>";
+             window.location.href='login.php';</script>";
 
             }
 
@@ -252,8 +257,12 @@
 
     </form>
 
-   
+
+
 
 </body>
+
+
+
 
 </html>
