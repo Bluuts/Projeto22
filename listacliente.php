@@ -68,7 +68,8 @@ if ($link) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="./css/estiloadm.css"> <title>MENU ADMINISTRATIVO</title>
+    <link rel="stylesheet" href="./css/estiloadm.css">
+    <title>MENU ADMINISTRATIVO</title>
 
 </head>
 
@@ -76,11 +77,6 @@ if ($link) {
 
 
 <body>
-
-
-
-
-
 
     <div>
 

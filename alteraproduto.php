@@ -1,16 +1,14 @@
 <?php
 include("conectadb.php");
-
 session_start();
-$nomeusuario = $_SESSION["nomeusuario"];
+$nomeusuario = $_SESSION['nomeusuario'];
 
 // TRAZER DADOS DO BANCO
 $id = $_GET['id'];
-$sql = "SELECT * FROM produtos WHERE pro_id = $id";
+$sql = "SELECT * FROM produtos WHERE pro_id = '$id'";
 $retorno = mysqli_query($link, $sql);
 
-while($tbl = mysqli_fetch_array($retorno))
-{
+while($tbl = mysqli_fetch_array($retorno)){
     $id = $tbl[0];
     $nome = $tbl[1];
     $descricao = $tbl[2];
@@ -21,9 +19,9 @@ while($tbl = mysqli_fetch_array($retorno))
     $imagem_atual = $tbl[7];
 }
 
+
 // ENVIO DAS ALTERAÇÕES
-if($_SERVER['REQUEST_METHOD'] == 'POST')
-{
+if($_SERVER['REQUEST_METHOD']=='POST'){
     $id = $_POST['id'];
     $nome = $_POST['nome'];
     $descricao = $_POST['descricao'];
@@ -34,9 +32,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     $imagem_base64 = $_POST['imagem'];
     $imagem_atual = $_POST['imagem_atual'];
 
-    // CRIPTOGRAFAR A IMAGEM QUE IRÁ PARA O BANCO
-    if(isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK)
-    {
+    //CRIPTOGRAFAR A IMAGEM QUE IRÁ PARA O BANCO
+    if(isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK){
         $imagem_temp = $_FILES['imagem']['tmp_name'];
         $imagem = file_get_contents($imagem_temp);
         $imagem_base64 = base64_encode($imagem);
@@ -44,22 +41,28 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 
     //VERIFICAR SE É A MESMA IMAGEM
     //SE FOR IGUAL
-    if($imagem_atual == $imagem_base64)
-    {
-        $sql = "UPDATE produtos SET pro_nome = '$nome', pro_descricao = '$descricao', pro_quantidade = $quantidade, pro_custo = $custo, pro_preco = $preco, pro_ativo = '$ativo' WHERE pro_id = '$id'";
+    if($imagem_atual == $imagem_base64){
+        $sql = "UPDATE produtos SET pro_nome = '$nome', pro_descricao = '$descricao', pro_quantidade = $quantidade,
+        pro_custo = $custo, pro_preco = $preco, pro_ativo = '$ativo' WHERE pro_id = '$id'";
 
         mysqli_query($link, $sql);
-        echo "<script>window.alert('PRODUTO ALTERADO');</script>";
-        echo "<script>window.location.href='listaproduto.php';</script>";
+
+        echo"<script>window.alert('PRODUTO ALTERADO!');</script>";
+        echo"<script>window.location.href='listaproduto.php';</script>";
     }
-    else
-    {
-        $sql = "UPDATE produtos SET pro_nome = '$nome', pro_descricao = '$descricao', pro_quantidade = $quantidade, pro_custo = $custo, pro_preco = $preco, pro_ativo = '$ativo', imagem1 = '$imagem_base64' WHERE pro_id = '$id'";
+    //SE A IMAGEM QUE FOR COLOCADA FOR DIFERENTE
+    else{
+        $sql = "UPDATE produtos SET pro_nome = '$nome', pro_descricao = '$descricao', pro_quantidade = $quantidade,
+        pro_custo = $custo, pro_preco = $preco, pro_ativo = '$ativo', imagem1 = '$imagem_base64' WHERE pro_id = '$id'";
+
         mysqli_query($link, $sql);
-        echo "<script>window.alert('PRODUTO ALTERADO');</script>";
-        echo "<script>window.location.href='listaproduto.php';</script>";
+
+        echo"<script>window.alert('PRODUTO ALTERADO!');</script>";
+        echo"<script>window.location.href='listaproduto.php';</script>";
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -72,13 +75,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     <title>ALTERA PRODUTO</title>
 </head>
 
-<!-- COMEÇO MENU GLOBAL -->
-
 <body>
+    <!-- NOSSO MENU GLOBAL -->
     <div>
         <ul class="menu">
             <li><a href="cadastrausuario.php">CADASTRA USUARIO</a></li>
-            <li><a href="cadastracliente.php">CADASTRA CLIENTE</a></li>
             <li><a href="listausuario.php">LISTA USUARIO</a></li>
             <li><a href="cadastraproduto.php">CADASTRA PRODUTO</a></li>
             <li><a href="listaproduto.php">LISTA PRODUTO</a></li>
@@ -92,7 +93,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                 <!-- USO DO ELEMENTO HTML COM PHP INTERNO -->
                 <li class="profile">OLÁ <?= strtoupper($nomeusuario) ?></li>
             <?php
-            #ABERTURA DE OUTRO PHP PARA CASO FALSE
+                #ABERTURA DE OUTRO PHP PARA CASO FALSE
             } else {
                 echo "<script>window.alert('USUARIO NÃO AUTENTICADO');
                         window.location.href='login.php';</script>";
@@ -106,27 +107,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     <div class="formulario">
         <form class="visualizaproduto" action="alteraproduto.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" id="nome" value="<?= $id ?>">
-
             <label>NOME</label>
             <input type="text" name="nome" value="<?= $nome ?>">
-
             <label>DESCRIÇÃO</label>
             <input type="text" name="descricao" value="<?= $descricao ?>">
-
             <label>QUANTIDADE</label>
             <input type="number" name="quantidade" value="<?= $quantidade ?>">
-
             <label>CUSTO</label>
             <input type="decimal" name="custo" value="<?= $custo ?>">
-
             <label>PREÇO</label>
             <input type="decimal" name="preco" value="<?= $preco ?>">
-
-            <label>STATUS: <?= $ativo == 's' ? "ATIVO" : "INATIVO" ?></label><br>
-            <input type="radio" id="ativo_s" name="ativo" value="s" <?= $ativo == "s" ? "checked" :
-            "" ?>><label for="ativo_s"> ATIVO </label>
-            <input type="radio" id="ativo_n" name="ativo" value="n" <?= $ativo == "n" ? "checked" :
-            "" ?>><label for="ativo_n"> INATIVO </label>
+            <label>STATUS: <?= $ativo == 's' ? "ATIVO" : "INATIVO" ?></label>
+            <br>
+            <input type="radio" id="ativo" name="ativo" value="s" <?= $ativo == "s" ? "checked" : "" ?>><label>ATIVO</label>
+            <input type="radio" id="ativo" name="ativo" value="n" <?= $ativo == "n" ? "checked" : "" ?>><label>INATIVO</label>
             <input type="file" name="imagem" id="imagem">
             <br>
 
@@ -137,8 +131,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     <div>
         <!-- PEÇA ESSENCIAL PARA COLETAR A IMAGEM ATUAL -->
         <td><img name="imagem_atual" class="imagem_atual" src="data:image/jpeg;base64,<?= $imagem_atual ?>"></td>
-
     </div>
+
 
 </body>
 

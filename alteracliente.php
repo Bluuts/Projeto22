@@ -1,110 +1,92 @@
-<!-- ESTRUTURA EM PHP QUE SERA UTILIZANDO EM CADASTRAPRODUTO.HTML -->
-
 <?php
 
+include("conectadb.php");
 
+ 
 
+session_start();
 
-    include("conectadb.php");
+$nomeusuario = $_SESSION["nomeusuario"]; // FAZ SEU NOME VIR NA CESSÃO
 
+ 
 
+# TRAZ DADOS DO BANCO PARA COMPLETAR OS CAMPOS
 
+$id = $_GET['id'];
 
-    session_start();
+$sql = "SELECT * FROM clientes WHERE cli_id = '$id'";
 
-    $nomeusuario = $_SESSION['nomeusuario'];
+$retorno = mysqli_query($link, $sql);
 
+ 
 
+# PREENCHENDO O ARRAY SEMPRE
 
+ 
 
-    if($_SERVER ['REQUEST_METHOD'] == 'POST'){
+while($tbl = mysqli_fetch_array($retorno)){
 
-        $nome = $_POST['nome'];
+    $cpf = $tbl[1]; #CAMPO CPF DA TABELA DO BANCO
 
-        $descricao = $_POST['$descricao'];
+    $nome = $tbl[2]; #CAMPO NOME DA TABELA DO BANCO
 
-        $quantidade = $_POST['quantidade'];
+    $senha = $tbl[3]; #CAMPO SENHA DA TABELA DO BANCO
 
-        $custo = $_POST['custo'];
+    $datanasc = $tbl[4];
 
-        $preco = $_POST['preco'];
+    $telefone = $tbl[5];
 
-    }
+    $logradouro = $tbl[6];
 
-    // THE WITCH IS COMING
+    $numero = $tbl[7];
 
+    $cidade = $tbl[8];
 
+    $ativo = $tbl[9];
 
+}
 
-    // TRANFORMA A IMAGEM EM CRIPTOGRAFIA, TORNANDO ELA MAIS LEVE
+ 
 
-    if(isset($_FILES['imagem']) && $_FILES['imagem']['error']=== UPLOAD_ERR_OK){ // (===) IDENTIFICA SE ALGO É IDENTICO
+# USUARIO CLICA NO BOTÃO SALVAR
 
-        $imagem_temp = $_FILES['imagem']['tmp_name'];
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-        $imagem = file_get_contents($imagem_temp);
+    $id = $_POST['id'];
 
-        $imagem_base64 = base64_encode($imagem);
+    $cpf = $_POST['cpf'];
 
-    }
+    $nome = $_POST['nome'];
 
+    $senha = $_POST['senha'];
 
+    $datanasc = $_POST['datanasc'];
 
+    $telefone = $_POST['telefone'];
 
+    $logradouro = $_POST['logradouro'];
 
-    // FIM
+    $cidade = $_POST['cidade'];
 
+    $ativo = $_POST['ativo'];
 
+ 
 
+    $sql = "UPDATE clientes SET cli_cpf = '$cpf', cli_nome = '$nome', cli_senha = '$senha', cli_datanasc = '$datanasc', cli_telefone = '$telefone', cli_logradouro = '$logradouro', cli_cidade = '$cidade', cli_ativo = '$ativo' WHERE cli_id = $id";
 
-    // QUERY DO BANCO
+    mysqli_query($link, $sql);
 
+ 
 
+    echo"<script>window.alert('CLIENTE ALTERADO COM SUCESSO!');</script>";
 
+    echo"<script>window.location.href='admhome.php';</script>";
 
-    $sql = "SELECT COUNT(pro_id) FROM produtos WHERE pro_nome = '$nome'";
-
-    $retorno = mysqli_query($link, $sql);
-
-    while($tbl = mysqli_fetch_array($retorno)){
-
-        $cont = $tbl[0];
-
-
-
-
-        // VERIFICA SE PRODUTO EXISTE, SE SIM, INFORMA, SE NÃO, INSERE
-
-        if($cont == 1){
-
-            echo"<script>window.alert('PRODUTO JÁ CADASTRADO');</script>";
-
-        }
-
-
-
-
-        else{
-
-            $sql = "INSERT INTO produtos (pro_nome, pro_descricao, pro_quantidade, pro_custo, pro_preco, pro_ativo, imagem1) VALUE ('$nome', '$descricao', '$quantidade', '$custo', '$preco', 's', '$imagem_base64')";
-
-            mysqli_query($link, $sql);
-
-            echo"<script>window.alert('PRODUTO CADASTRADO COM SUCESSO!');</script>";
-
-            echo"<script>window.location.href='listaproduto.php';</script>";
-
-        }
-
-    }
-
-
-
+}
 
 ?>
 
-
-
+ 
 
 <!DOCTYPE html>
 
@@ -118,18 +100,13 @@
 
     <link rel="stylesheet" href="./css/estiloadm.css">
 
-    <title>CADASTRA PRODUTO</title>
+    <title>ALTERA CLIENTE</title>
 
 </head>
 
 <body>
 
-
-
-
-<div>
-
-    <!--  -->
+    <div>
 
         <ul class="menu">
 
@@ -139,121 +116,82 @@
 
             <li><a href="listausuario.php">LISTA USUARIO</a></li>
 
-            <li><a href="cadastraproduto.php">CADASTRA PRODUTO</a></li>
+            <li><a href="cadastraproduto.php">CADASTRA PRODUTOS</a></li>
 
-            <li><a href="listaproduto.php">LISTA PRODUTO</a></li>
+            <li><a href="listaproduto.php">LISTA PRODUTOS</a></li>
 
             <li><a href="listacliente.php">LISTA CLIENTE</a></li>
 
-            <li class="menuloja"><a href="logout.php">SAIR</a></li>
+            <li class="menuloja"><a href="./areacliente/loja.php">LOJA</a></li>
 
-            <?php
-
-            #ABERTO O PHP PARA VALIDAR SE A SESSÃO DO USUARIO ESTÁ ABERTA
-
-            #SE SESSÃO ABERTA, FECHA O PHP PARA USAR ELEMENTOS HTML
-
-            if ($nomeusuario != null) {
-
-            ?>
-
-                <!-- USO DO ELEMENTO HTML COM PHP INTERNO -->
-
-                <li class="profile">OLÁ <?= strtoupper($nomeusuario) ?></li>
-
-            <?php
-
-                #ABERTURA DE OUTRO PHP PARA CASO FALSE
-
-            } else {
-
-                echo "<script>window.alert('USUARIO NÃO AUTENTICADO');
-
-                        window.location.href='login.php';</script>";
-
-            }
-
-            #FIM DO PHP PARA CONTINUAR MEU HTML
-
-            ?>
-
-        </ul>
+        </ul>  
 
     </div>
 
+ 
 
+    <div>
 
+        <form action="alteracliente.php" method="post">
 
-    <!-- ESTRUTURA DA PÁGINA -->
+ 
 
+            <input type="hidden" name="id" value="<?=$id?>">
 
+            <input type="number" name="cpf" id="cpf" value="<?=$cpf?>" required> <!-- required faz não passar em branc-->
 
+            <br>
 
-    <form action="cadastraproduto.php" method="post" enctype="multipart/form-data">
+            <input type="text" name="nome" id="nome" value="<?=$nome?>" required>
 
-        <label>NOME DO PRODUTO</label>
+            <br>
 
-        <input type="text" name="nome" id="nome">
+ 
 
-        <br>
+            <input type="password" name="senha" id="senha" value="<?=$senha?>" required>
 
+            <br>
 
+            <input type="date" name="datanasc" id="datanasc" value="<?=$datanasc?>" required>
 
+            <br>
 
-        <label>DESCRIÇÃO</label>
+            <input type="number" name="telefone" id="telefone" value="<?=$telefone?>" required>
 
-        <textarea name="descricao" id="descricao" rows="4" resize="none"></textarea> <!-- CRIA UMA AREA DE TEXTO -->
+            <br>
 
-        <br>
+            <input type="text" name="logradouro" id="logradouro" value="<?=$logradouro?>" required>
 
+            <br>
 
+            <input type="text" name="numero" id="numero" value="<?=$numero?>" required>
 
+            <br>
 
-        <label>QUANTIDADE</label>
+            <input type="text" name="cidade" id="cidade" value="<?=$cidade?>" required>
 
-        <input type="number" name="quantidade" id="quantidade">
+            <br>
 
-        <br>
+            <input type="radio" name="ativo" value="s" <?=$ativo == "s"?"checked":""?>>ATIVO
 
+            <br>
 
+            <input type="radio" name="ativo" value="n" <?=$ativo == "n"?"checked":""?>>INATIVO
 
+ 
 
-        <label>CUSTO</label>
+            <input type="submit" name="salvar" id="salvar" value="SALVAR">
 
-        <input type="decimal" name="custo" id="custo">
+ 
 
-        <br>
+        </form>
 
+    </div>
 
-
-
-        <label>PREÇO</label>
-
-        <input type="decimal" name="preco" id="preco">
-
-        <br>
-
-
-
-
-        <label>IMAGEM</label>
-
-        <input type="file" name="imagem" id="imagem">
-
-        <br>
-
-
-
-
-        <input type="submit" name="cadastrar" id="cadastrar">
-
-
-
-
-    </form>
-
-   
+ 
 
 </body>
 
 </html>
+
+ 
