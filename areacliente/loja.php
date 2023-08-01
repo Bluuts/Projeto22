@@ -59,7 +59,7 @@ $retorno = mysqli_query($link, $sql);
                 <p><?= $tbl[2] ?></p>
 
                 <!-- BOTÃO ADD PRODUTO NO CARRINHO -->
-                <p><a class="botap" href="verproduto.php?id=<?= $tbl[0] ?>"><input type="button" class="botao" value="VISUALIZAR DETALHES"></a></p>
+                <p><a class="botao" href="verproduto.php?id=<?= $tbl[0] ?>"><input type="button" class="botao" value="VISUALIZAR DETALHES"></a></p>
             </div>
             <?php
         }

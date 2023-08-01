@@ -1,0 +1,13 @@
+            else
+            {
+                //SE O CARRINHO EXISTE, CONSULTA O NUMERO DO CARRINHO APRA ADD ITENS AO CARRINHO
+                $sql = "SELECT DISTINCT(car_numero_carrinho) FROM itens_carrinho WHERE fk_cli_id = '$idcliente' and car_finalizado = 'n'";
+                $retorno = mysqli_query($link,$sqli);
+
+                while($tbl = mysqli_fetch_array($retorno))
+                {
+                    $numerocarrinhocliente = $tbl[0];
+                    $_SESSION['carrinhoid'] = $numerocarrinhocliente;
+                    $sql= "INSERT INTO itens_carrinho(fk_pro_id, car_item_quantidade, fk_cli_id, car_total_item, car_numero_carrinho, car_finalizado) VALUES ($id, '$quantidade', '$idcliente', '$totalitem', '$numerocarrinho',
+                }
+            }
